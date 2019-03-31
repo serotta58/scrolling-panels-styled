@@ -1,0 +1,243 @@
+/* Use border-box sizing for everything */
+* {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* Prevent horizontal scrolling if anything overflows the width */
+body {
+  overflow-x: hidden;
+}
+
+/* Remove default browser padding/margin */
+html,
+body {
+  padding: 0;
+  margin: 0;
+  color: #ebebeb;
+}
+
+/* Use flexbox to center the text vertically and horizontally.
+ * The top just stays put as there is no scrolling on the body
+ * due to the page never exceeding viewport height.  Thus there
+ * is no need to make it sticky or fixed. */
+.Top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: darkgreen;
+  font-size: 3rem;
+  position: relative;
+  z-index: 10;
+  height: 100px;
+}
+
+/* This is our main wrapping element. It's made 100vh high to ensure it is
+ * always the correct size viewport size.  But this alone would still make it
+ * start below the Top and flow off the page, so it is moved up against the
+ * top of the viewport.  There are two ways to do this:
+ *      margin-top: -100px;
+ *      postion: relative;
+ * OR
+ *      top: 0;
+ *      position: fixed;
+ * I prefer the later since it isn't affected by changes to the Top height.
+ * Either way requires that the padding be set to match (or exceed) the Top
+ * height so that the content doesn't get covered or overlap the Top. */
+.Container {
+  display: flex;
+  overflow: hidden;
+  height: 100vh;
+  top: 0;
+  position: fixed;
+  padding-top: 100px;   /* to keep content below the Top section */
+  width: 100%;
+  backface-visibility: hidden;
+  will-change: overflow;
+}
+
+/* All the scrollable sections should overflow and be whatever height they need
+ * to be. As they are flex-items (due to being inside a flex container) they
+ * could be made to stretch full height at all times if needed.  WebKit inertia
+ * scrolling is added here for any devices that are able to use it. That makes
+ * inertia work on iOS devices, for example, with Safari or Chrome browsers. */
+.Left,
+.Middle,
+.Right {
+  overflow: auto;
+  height: auto;
+  padding: .5rem;
+  -webkit-overflow-scrolling: touch;    /* use inertia */
+  -ms-overflow-style: none;
+}
+
+/* Use this to hide all or individual scrollbars */
+/* .Left::-webkit-scrollbar,
+.Middle::-webkit-scrollbar,
+.Right::-webkit-scrollbar {
+  display: none;
+} */
+
+/* Left and Right are fixed sizes while the Middle is set to flex 1 so it
+ * occupies all remaining space. */
+.Left {
+  width: 12.5rem;
+  background-color: indigo;
+}
+
+.Middle {
+  flex: 1;
+  color: #222222;
+  background-color: cyan;
+}
+
+.Right {
+  width: 12.5rem;
+  background-color: violet;
+}
+
+
+/*************************************************************
+ * Examples of how to style scrollbars in WebKit browsers
+ * (Safari, Chrome, Edge?...) differently than the defaults.
+ * These are similar (and based on?) the Gmail web app.
+ *************************************************************/
+/* See this article:
+ *  http://www.webkit.org/blog/363/styling-scrollbars/
+ */
+
+/* I haven't figured out what the class names mean yet, but obviously
+ * you can make your own to apply different stylings to different elements.
+ * I'm guessing that these were taken from Gmail and may change over time,
+ * or with different user style option settings.  Three classes are used below:
+ *  - .e-Rb:
+ *  - .zF modifier to .e-Rb:
+ *  - .e-Rb-xTH6G modifier to .e-Rb:
+ *
+ * The R may refer to the rectangular scrollbar bar (default is rounded).
+ */
+
+/* .zF class modifier to .e-Rb */
+/* This just modifies the dimensions of the scrollbar, thumb and track. */
+/* The net effect is to reduce the scrollbar width by 4, and the thumb and
+ * track left borders (transparent) by 4 as well.  Basically, the whole
+ * assembly becomes 4px narrower, but only the left transparent borders have
+ * shrunk, so it looks the same visually but lets the text or whatever get
+ * 4px closer to the vertical scrollbar..
+*/
+.zF.e-Rb::-webkit-scrollbar {
+    width: 12px;
+}
+.zF.e-Rb::-webkit-scrollbar-thumb {
+    border-width: 1px 1px 1px 2px;
+}
+.zF.e-Rb::-webkit-scrollbar-track {
+    border-width: 0;
+}
+
+
+/* .e-Rb class settings */
+.e-Rb::-webkit-scrollbar {
+    height: 16px;
+    overflow: visible;
+    width: 16px;
+}
+.e-Rb::-webkit-scrollbar-button {
+    height: 0;
+    width: 0;
+}
+.e-Rb::-webkit-scrollbar-track {
+    background-clip: padding-box;
+    border: solid transparent;
+    border-width: 0 0 0 4px;
+}
+.e-Rb::-webkit-scrollbar-track:horizontal {
+    border-width: 4px 0 0
+}
+.e-Rb::-webkit-scrollbar-track:hover {
+    background-color: rgba(0,0,0,.05);
+    box-shadow: inset 1px 0 0 rgba(0,0,0,.1);
+}
+.e-Rb::-webkit-scrollbar-track:horizontal:hover {
+    box-shadow: inset 0 1px 0 rgba(0,0,0,.1)
+}
+.e-Rb::-webkit-scrollbar-track:active {
+    background-color: rgba(0,0,0,.05);
+    box-shadow: inset 1px 0 0 rgba(0,0,0,.14),inset -1px 0 0 rgba(0,0,0,.07);
+}
+.e-Rb::-webkit-scrollbar-track:horizontal:active {
+    box-shadow: inset 0 1px 0 rgba(0,0,0,.14),inset 0 -1px 0 rgba(0,0,0,.07)
+}
+.e-Rb::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,.2);
+    background-clip: padding-box;
+    border: solid transparent;
+    border-width: 1px 1px 1px 6px;
+    min-height: 28px;
+    padding: 100px 0 0;
+    box-shadow: inset 1px 1px 0 rgba(0,0,0,.1),inset 0 -1px 0 rgba(0,0,0,.07);
+}
+.e-Rb::-webkit-scrollbar-thumb:horizontal {
+    border-width: 6px 1px 1px;
+    padding: 0 0 0 100px;
+    box-shadow: inset 1px 1px 0 rgba(0,0,0,.1),inset -1px 0 0 rgba(0,0,0,.07);
+}
+.e-Rb::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0,0,0,.4);
+    box-shadow: inset 1px 1px 1px rgba(0,0,0,.25);
+}
+.e-Rb::-webkit-scrollbar-thumb:active {
+    background-color: rgba(0,0,0,0.5);
+    box-shadow: inset 1px 1px 3px rgba(0,0,0,0.35);
+}
+
+/* .e-Rb-xTH6G variation on .e-Rb class settings
+ * This makes the scrollbar smaller and removes any space around the thumb */
+.e-Rb-xTH6G.e-Rb::-webkit-scrollbar-track {
+    border-width: 0 1px 0 6px
+}
+.e-Rb-xTH6G.e-Rb::-webkit-scrollbar-track:horizontal {
+    border-width: 6px 0 1px
+}
+.e-Rb-xTH6G.e-Rb::-webkit-scrollbar-track:hover {
+    background-color: rgba(0,0,0,.035);
+    box-shadow: inset 1px 1px 0 rgba(0,0,0,.14),inset -1px -1px 0 rgba(0,0,0,.07);
+}
+.e-Rb-xTH6G.e-Rb::-webkit-scrollbar-thumb {
+    border-width: 0 1px 0 6px
+}
+.e-Rb-xTH6G.e-Rb::-webkit-scrollbar-thumb:horizontal {
+    border-width: 6px 0 1px
+}
+.e-Rb::-webkit-scrollbar-corner {
+    background: transparent
+}
+
+
+/* global body settings if .e-Rb class is applied to body
+ * In this example, they are not used since the overall body isn't scrollable
+ */
+body.e-Rb::-webkit-scrollbar-track-piece {
+    background-clip: padding-box;
+    background-color: #f5f5f5;
+    border: solid #fff;
+    border-width: 0 0 0 3px;
+    box-shadow: inset 1px 0 0 rgba(0,0,0,.14),inset -1px 0 0 rgba(0,0,0,.07);
+}
+body.e-Rb::-webkit-scrollbar-track-piece:horizontal {
+    border-width: 3px 0 0;
+    box-shadow: inset 0 1px 0 rgba(0,0,0,.14),inset 0 -1px 0 rgba(0,0,0,.07);
+}
+body.e-Rb::-webkit-scrollbar-thumb {
+    border-width: 1px 1px 1px 5px
+}
+body.e-Rb::-webkit-scrollbar-thumb:horizontal {
+    border-width: 5px 1px 1px
+}
+body.e-Rb::-webkit-scrollbar-corner {
+    background-clip: padding-box;
+    background-color: #f5f5f5;
+    border: solid #fff;
+    border-width: 3px 0 0 3px;
+    box-shadow: inset 1px 1px 0 rgba(0,0,0,.14);
+}
