@@ -10,15 +10,18 @@ On WebKit browsers the two right sections have styled scrollbars similar to the 
 
 On WebKit browsers on touchscreen devices, inertia is added to the scrolling.  This is handy and expected effect on iOS devices with Safari and Chrome browsers, for example.
 
-## TO-DO
+## To-Do
 
-- Fix issues on iOS devices with Safari
+- Fix iPhone/Safari issue that makes whole page scrollable when it shouldn't be
 
-  The browser URL bar and footer hide part of the page and make the whole page scrollable since it no longer fits in the leftover space, but apparently thinks the viewport is the full screen height.  The browser bar and footer won't go away either since you can't really scroll the page down.
+  On an iPhone SE in landscape mode, the browser URL bar and footer hides part of the page.  This makes the whole page scrollable since it no longer fits in the leftover space.  The browser URL bar and footer won't go away either since you can't really scroll the page down past viewport size.  On other pages that are typically longer, the URL bar and footer shrink when you scroll the page away from the top.
 
-  Chrome on iOS also shows the URL bar and footer, but resizes the viewport to the leftover space between them, so everything works correctly.
+  This is not an issue with Chrome on the iPhone.
 
-  There seem to be two possible solutions:
+- iOS URL bar and footer won't shrink or hide
 
-  - Make sure the viewport size (or whatever the CSS code is using to size the container) matches the space that is actually available between the URL bar and footer.
-  - Make the URL bar and footer hide so the page has the full screen.
+  Typically, pages are longer than the viewport, and scrolling down causes the iOS Safari and Chrome browsers to shrink or hide the URL bar and footer.  But since this page keeps everything within the viewport, this feature of the browser is never triggered, resulting in less real estate for the page.
+
+  Find a way to minimize or close the URL bar and footer.  And figure out how to bring them back when needed, such as to enter something into the URL input.
+
+  This is primarily an issue for phones where the browser takes up a larger percentage of the space.
